@@ -3,8 +3,8 @@
 First NodeJS app foir training purposes.
 
 ## Using:
-> NodeJS
-> Express
-> Handlebars
+> NodeJS,
+> Express,
+> Handlebars and
 > MySQL
 
