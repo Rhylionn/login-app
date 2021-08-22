@@ -1,4 +1,5 @@
 const db = require('../core/database')
+const userController = require('../controllers/user')
 const Post = require('../models/Post')
 
 exports.add = (req, res, next) => {
@@ -38,12 +39,20 @@ exports.add = (req, res, next) => {
     }
 }
 
-exports.getAllPosts = async () => {
+exports.getAllPosts = async (req, res) => {
     const posts = await Post.findAll()
+
+    posts.forEach(async post => {
+        const createdBy = await Post.who(post.uuid)
+        const imagePath = userController.getPicture(post.uuid)
+        post.user = createdBy[0].name
+        post.imagePath = imagePath
+    })
 
     return posts
 }
 
 exports.whoPosted = async(uuid) => {
-    const user = await Post.who(uuid)
+    const user = Post.who(uuid)
+    return user
 }

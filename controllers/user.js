@@ -2,6 +2,7 @@ const db = require('../core/database')
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
 const fs = require('fs')
+const User = require('../models/User')
 
 exports.changeEmail = (req, res) => {
     
@@ -69,48 +70,12 @@ exports.changePassword = (req, res) => {
     }
 } 
 
-exports.delete = (req, res) => {
-    db.query('SELECT * FROM users WHERE id = ? AND email = ?', [req.session.user.id, req.session.user.email], (err, result) => {
-        if(result.length != 1){
-            res.render('profile/delete', {
-                message: 'MASSIVE DANGER: Multiple email addresses'
-            })
-        } else {
-            user = result[0]
+exports.deleteMyAccount = async (req, res) => {
+    const userSession = req.session.user
+    const user = new User(userSession.uuid, userSession.name, userSession.email, userSession.role, userSession.subscription)
 
-            if(user.email == req.session.user.email && user.id == req.session.user.id){
-                bcrypt.compare(req.body.password, user.password)
-                .then(valid => {
-                    if(!valid){
-                        res.render('profile/delete', {
-                            message: 'Password does not match'
-                        })
-                    } else {
-                        let token = crypto.randomBytes(32).toString('hex');
+    console.log(await user.verifyPassword(req.body.password))
 
-                        bcrypt.hash(token, 8).then(hashedPassword => {
-                            db.query('UPDATE users SET name = ?, email = ?, password = ? WHERE id = ? AND email = ?', ['DELETED USER', `del-${token}`, hashedPassword, user.id, user.email], (error) => {
-                                if(err){
-                                    return res.render('profile/delete', {
-                                        message: err
-                                    })
-                                } else {
-                                    return res.redirect('logout')
-                                }
-                            })
-                        })
-                        
-                    }
-                })
-            } else {
-                res.render('profile/delete', {
-                    message: 'Attempting to bypass security'
-                })
-            }
-
-
-        }
-    })
 }
 
 exports.changePicture = (req, res) => {
@@ -166,18 +131,13 @@ exports.changePicture = (req, res) => {
     }
 }
 
-exports.getPicture = (req, res) => {
-    user = req.session.user
+exports.getPicture = (uuid) => {
+    const picturePath = User.getPicture(uuid)
+    return picturePath
+}
 
-    let picPath;
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif']
-    allowedExtensions.forEach(ext => {
-
-        if(fs.existsSync(`public/profile/pictures/${user.uuid}.${ext}`)){
-            picPath = `/profile/pictures/${user.uuid}.${ext}`
-        }
-
-    })
-
-    return picPath
+exports.findUser = async (uuid) => {
+    const user = await User.find(uuid)
+    console.log(user)
+    return user
 }

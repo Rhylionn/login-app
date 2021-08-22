@@ -2,6 +2,7 @@ const db = require('../core/database')
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
 const uuid = require('uuid')
+const User = require('../models/User')
 
 exports.register = (req, res, next) => {
 

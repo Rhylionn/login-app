@@ -1,7 +1,7 @@
 {
   "name": "login-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "First NodeJS app foir training purposes.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js"
@@ -18,8 +18,16 @@
     "express-handlebars": "^5.3.3",
     "express-session": "^1.17.2",
     "hbs": "^4.1.2",
-    "mysql": "^2.18.1",
+    "mysql2": "^2.3.0",
     "nodemon": "^2.0.12",
     "uuid": "^8.3.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rhylionn/login-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Rhylionn/login-app/issues"
+  },
+  "homepage": "https://github.com/Rhylionn/login-app#readme"
 }

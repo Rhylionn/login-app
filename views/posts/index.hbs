@@ -15,18 +15,20 @@
                     <div class="leftSide">
                         Quote
                     </div>
+                    {{#if this.isMine }}
                     <div class="rightSide">
                         <button class="btn btn-success btn-sm">Editer</button>
                         <button class="btn btn-danger btn-sm">Supprimer</button>
                     </div>
+                    {{/if}}
                 </div>
                 <div class="card-body d-flex justify-content-around">
                     <div class="profilePicture left">
-                        <img src="/profile/pictures/default_picture.jpg" alt="">
+                        <img src="{{this.imagePath}}" alt="">
                     </div>
-                    <blockquote class="blockquote mb-0 mt-3">
+                    <blockquote class="blockquote mb-0 mt-3" style="width: 30rem;">
                         <p>{{this.post}}</p>
-                        <footer class="blockquote-footer">Someone</footer>
+                        <footer class="blockquote-footer">{{this.user}}</footer>
                     </blockquote>
                 </div>
             </div>  

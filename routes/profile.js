@@ -4,9 +4,11 @@ const userController = require('../controllers/user')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    picPath = userController.getPicture(req, res)
-    user = req.session.user
+    const user = req.session.user
+    const picPath = userController.getPicture(user.uuid)
     user.isAdmin = user.role === 'ADMIN' ? true : false
+
+   userController.findUser(req.session.user.uuid)
 
     return res.render('profile/index', {
         user: user,
@@ -46,7 +48,7 @@ router
 })
 
 router
-.post('/delete', userController.delete)
+.post('/delete', userController.deleteMyAccount)
 .get('/delete', (req, res) => {
     user = req.session.user
     return res.render('profile/delete', {

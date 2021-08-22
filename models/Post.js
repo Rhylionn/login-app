@@ -16,12 +16,14 @@ module.exports = class Post{
 
     }
 
-    static who(uuid){
+    static async who(uuid){
         return new Promise((resolve, reject) => {
-            db.query('SELECT * FROM users WHERE uuid = ?', [uuid], (err, result) => {
+            db.query('SELECT name FROM users WHERE uuid = ?', [uuid], (err, result) => {
                 return err ? reject(err) : resolve(result)
             })
         })
     }
+
+    
 
 }
