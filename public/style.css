@@ -1,0 +1,28 @@
+#profile .picture-container img{
+    margin: 30px 0;
+    width: 150px; height: 150px;
+}
+
+#main{
+    background-color: #001122;
+}
+
+#main .spacer{
+    aspect-ratio: 960/94;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+#main .layer2{
+    background-image: url('./images/layered-waves-haikei.svg');
+}
+
+#main .flip{
+    transform: rotate(180deg);
+}
+
+#posts .profilePicture img{
+    width: 100px; height: 100px;
+}

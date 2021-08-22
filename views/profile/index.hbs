@@ -1,0 +1,26 @@
+{{#section 'header'}}
+    <title>My account</title>
+{{/section}}
+
+<section id="profile">
+    <div class="p-5 mb-4 bg-light rounded-3 d-flex justify-content-around">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Welcome {{user.name}} 🎉</h1>
+            {{#if user.isAdmin }}
+            <span class="badge rounded-pill bg-danger">Admin</span>
+            {{/if}}
+            <span class="badge rounded-pill bg-dark">{{user.subscription}}</span>
+            <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
+            <button class="btn btn-dark btn-lg" onclick="location.href='logout'" type="button">Logout</button>
+            <button class="btn btn-success btn-lg" onclick="location.href='edit'" type="button">Edit</button>
+        </div>
+        <div class="py-5">
+            <div class="picture-container">
+                <div class="text-center">
+                    <img src="{{profilePicture}}" class="rounded" alt="...">
+                    <button class="btn btn-primary btn-sm" onclick="location.href='edit/picture'">Change picture</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,25 @@
+{{#section 'header'}}
+    <title>Profile pic edition</title>
+{{/section}}
+<div class="card mx-auto" style="width: 40rem;">
+    <div class="card-header">
+        Change my profile picture
+    </div>
+    <div class="card-body">
+        <form action="picture" method="POST" encType="multipart/form-data">
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Select your file</label>
+                <input class="form-control" type="file" id="formFile" name="profilePicture" aria-describedby="pictureHelp">
+                <div id="pictureHelp" class="form-text">File accepted: .jpg .png .gif under 1MB</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Change picture</button>
+        </form>
+    </div>
+    <div class="card-footer">
+        Metadatas are not removed on file upload, please take that in consideration
+    </div>
+</div>
+
+{{#if message }}
+    <h4 class="alert alert-danger mt-4">{{ message }}</h4>
+{{/if}}

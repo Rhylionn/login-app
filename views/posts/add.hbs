@@ -1,0 +1,23 @@
+{{#section 'header'}}
+    <title>Add a comment</title>
+{{/section}}
+
+<section id="posts">
+   <div class="text-center">
+        <h1 class="display-5 fw-bold">Add a comment</h1>
+   </div>
+    <div class="card mx-auto mt-5" style="width: 40rem;">
+        <div class="card-header">
+            What's in your mind
+        </div>
+        <div class="card-body">
+            <form action="add" method="POST">
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Your comment: </label>
+                    <input type="text" class="form-control" id="comment" name="comment">
+                </div>
+                <button type="submit" class="btn btn-primary">Add!</button>
+            </form>
+        </div>
+    </div>
+</section>
