@@ -1,6 +1,6 @@
 # login-app
 
-First NodeJS app foir training purposes.
+First NodeJS app for training purposes.
 
 ## Using:
 > NodeJS,
