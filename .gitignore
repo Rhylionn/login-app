@@ -1,2 +1,4 @@
 .env
 node_modules
+public/profile/pictures/*
+!public/profile/pictures/default_picture.jpg

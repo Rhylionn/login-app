@@ -85,6 +85,7 @@ module.exports = class User{
 
             bcrypt.hash(token, 8).then(hashedPassword => {
                 db.query('UPDATE users SET name = ?, email = ?, password = ? WHERE uuid = ?', ['DELETED USER', `del-${token}`, hashedPassword, this.uuid], (error, result) => {
+                    fs.rmSync('public/' + User.getPicture(this.uuid))
                     return error ? reject(error) : resolve(result)
                 })
             })
