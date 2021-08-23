@@ -4,77 +4,89 @@ const crypto = require('crypto')
 const fs = require('fs')
 const User = require('../models/User')
 
-exports.changeEmail = (req, res) => {
+exports.changeEmail = async (req, res) => {
+    const userSession = req.session.user
+    const user = new User(userSession.uuid, userSession.name, userSession.email, userSession.role, userSession.subscription)
     
-    if(req.body.oldEmail != req.session.user.email){
-        console.log("MASSIVE DANGER: Email do not correspond to session")
+    if(await user.verify()){
+        user.changeEmail(req.body.newEmail)
+        .then(() => {
+            return res.redirect('/profile/logout')
+        })
+        .catch((error) => {
+            return res.render('profile/edit', {
+                user: user,
+                message: error.message
+            })
+        })
     } else {
-        db.query('SELECT id, email FROM users WHERE email = ? AND id = ?', [req.session.user.email, req.session.user.id], (err, result) => {
-            if(err){
-                res.render('profile/edit', {
-                    message: err
-                })
-            } else if(result.length != 1){
-                res.render('profile/edit', {
-                    message: 'MASSIVE DANGER: More than one email detected.',
-                    user: req.session.user
-                })
-            } else {
-
-                db.query('SELECT id FROM users WHERE LOWER(email) = ?', [req.body.newEmail.toLowerCase()], (errorr, result) => {
-                    if(result.length != 0) {
-                        res.render('profile/edit', {
-                            message: 'Email already in use',
-                            user: req.session.user
-                        })
-                    } else {
-                        db.query('UPDATE users SET email = ? WHERE email = ? AND id = ?', [req.body.newEmail, req.session.user.email, req.session.user.id], (error, result) => {
-                            if(error){
-                                res.render('profile/edit', {
-                                    message: err,
-                                    user: req.session.user
-                                })
-                            } else {
-                                res.redirect('logout')
-                            }
-                        })
-                    }
-                })
-            }
+        return res.render('edit', {
+            user: user,
+            message: 'User error, please try reconnecting before proceeding.'
         })
     }
-
-    db.query('SELECT id, email FROM users WHERE email = ? AND id = ?', [req.body.oldEmail, req.session.user.email])
 
 } 
 
-exports.changePassword = (req, res) => {
-    if (req.body.password == req.body.passwordConfirm){
+exports.changePassword = async (req, res) => {
+
+    const userSession = req.session.user
+    const user = new User(userSession.uuid, userSession.name, userSession.email, userSession.role, userSession.subscription)
+
+    if(await user.verify().catch()){
         
-        bcrypt.hash(req.body.password, 8).then(hashedPassword => {
-            db.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, req.session.user.id], (err, result) => {
-                if(err) { 
-                    res.render('profile/edit', {
-                        message: err
-                    })
-                } else {
-                    return res.redirect('/profile/logout')
-                }
+        if(req.body.password === req.body.passwordConfirm) {
+            user.changePassword(req.body.password)
+            .then(() => {
+                return res.redirect('/profile/logout')
             })
-        })
+            .catch((err) => {
+                return res.render('profile/edit', {
+                    user: user,
+                    message: err
+                })
+            })
+        } else {
+            return res.render('profile/edit', {
+                user: user,
+                message: 'Passwords does not correspond'
+            })
+        }
 
     } else {
         return res.render('profile/edit', {
-            message: "Password does not match"
+            message: 'User error, please try reconnecting before proceeding.',
+            user: user
         })
     }
+    
 } 
 
 exports.deleteMyAccount = async (req, res) => {
     const userSession = req.session.user
     const user = new User(userSession.uuid, userSession.name, userSession.email, userSession.role, userSession.subscription)
 
-    console.log(await user.verifyPassword(req.body.password))
+    const isValid = await user.verifyPassword(req.body.password).catch((valid) => { return false })
+
+    
+    if(isValid){
+        return user.delete()
+        .then(() => {
+            return res.redirect('/profile/logout')
+        })
+        .catch(err => { 
+            return res.render('profile/delte', {
+                user: user,
+                message: err
+            })
+        })
+    } else {
+        return res.render('profile/delete', {
+            user: user,
+            message: 'Password does not correspond'
+        })
+    }
+    
 
 }
 
@@ -138,6 +150,5 @@ exports.getPicture = (uuid) => {
 
 exports.findUser = async (uuid) => {
     const user = await User.find(uuid)
-    console.log(user)
     return user
 }
