@@ -1,6 +1,7 @@
 const db = require('../core/database')
 const userController = require('../controllers/user')
 const Post = require('../models/Post')
+const User = require('../models/User')
 
 exports.add = (req, res, next) => {
     user = req.session.user
@@ -52,7 +53,28 @@ exports.getAllPosts = async (req, res) => {
     return posts
 }
 
+exports.findPost = async (id) => {
+    const post = await Post.findById(id).catch(err => { return err })
+    return post
+}
+
 exports.whoPosted = async(uuid) => {
     const user = Post.who(uuid)
     return user
+}
+
+exports.reportPost = async (req, res) => {
+    const userSession = req.session.user
+    const user = new User(userSession.uuid, userSession.name, userSession.email, userSession.userController, userSession.subscription)
+
+    const post = await this.findPost(req.params.id)
+
+    post.report(user)
+    .then(() => {
+        return res.redirect('/posts')
+    })
+    .catch((err) => {
+        console.warn(err)
+        return res.redirect('/posts')
+    })
 }
