@@ -1,8 +1,18 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', (req, res) => {
-    res.render('admin/index')
+const adminController = require('../controllers/admin')
+
+router.get('/', async (req, res) => {
+    const untreated = await adminController.untreatedReports()
+    res.render('admin/index', {
+        user: req.session.user,
+        untreated: untreated
+    })
+})
+
+router.get('/reports', (req, res) => {
+    res.render('admin/reports')
 })
 
 module.exports = router
