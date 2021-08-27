@@ -7,16 +7,12 @@
         <h1 class="display-5 fw-bold">Reports manager</h1>
    </div>
    <div class="reportSection">
+       {{#each reports}}
        <div class="comment mx-auto mt-4" style="max-width: 50rem;">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="leftSide">
-                        <button type="button" class="btn btn-warning btn-sm" onclick="location.href='/posts/report/{{this.id}}'" aria-label="Left Align">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"></path>
-                            </svg>
-                        </button>
-                        Thomas (uuid) reported: 
+                        <span class="fw-bold">{{this.user.name}}</span> (UUID: {{this.user.uuid}}) reported :  
                     </div>
                     <div class="rightSide">
                         <button class="btn btn-success btn-sm" onclick="location.href='/posts/edit/{{this.id}}'">
@@ -33,11 +29,12 @@
                 </div>
                 <div class="card-body d-flex justify-content-around">
                     <blockquote class="blockquote mb-0" style="width: 30rem;">
-                        <p>A comment posted by: Pauline (UUID).</p>
-                        <footer class="blockquote-footer small">Saying : A PREVIEW OF THE POST POSTED BY THE USER</footer>
+                        <p>A comment posted by: {{this.poster.name}}<br/> (UUID: {{this.poster.uuid}}).</p>
+                        <footer class="blockquote-footer small" style="max-width: 40rem; overflow: hidden; white-space: nowrap;">Preview: {{this.post.comment}}</footer>
                     </blockquote>
                 </div>
             </div>  
        </div>
+       {{/each}}
    </div>
 </section>

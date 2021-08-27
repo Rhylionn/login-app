@@ -44,9 +44,10 @@ exports.getAllPosts = async (req, res) => {
     const posts = await Post.findAll()
 
     posts.forEach(async post => {
-        const createdBy = await Post.who(post.uuid)
-        const imagePath = userController.getPicture(post.uuid)
-        post.user = createdBy[0].name
+        const postObj = new Post(post.id, post.uuid, post.post)
+        const createdBy = await this.whoPosted(postObj)
+        const imagePath = userController.getPicture(postObj.posterUuid)
+        post.user = createdBy.name
         post.imagePath = imagePath
     })
 
@@ -58,8 +59,8 @@ exports.findPost = async (id) => {
     return post
 }
 
-exports.whoPosted = async(uuid) => {
-    const user = Post.who(uuid)
+exports.whoPosted = async(post) => {
+    const user = Post.who(post)
     return user
 }
 

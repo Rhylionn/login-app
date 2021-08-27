@@ -1,5 +1,5 @@
-const { registerPartial } = require('hbs')
 const db = require('../core/database')
+const User = require('../models/User')
 
 module.exports = class Post{
 
@@ -58,10 +58,10 @@ module.exports = class Post{
 
     }
 
-    static async who(uuid){
+    static async who(post){
         return new Promise((resolve, reject) => {
-            db.query('SELECT name FROM users WHERE uuid = ?', [uuid], (err, result) => {
-                return err ? reject(err) : resolve(result)
+            db.query('SELECT uuid, name, email, role, subscription FROM users WHERE uuid = ?', [post.posterUuid], (err, result) => {
+                return err ? reject(err) : resolve(new User(result[0].uuid, result[0].name, result[0].email, result[0].role, result[0].subscripiton))
             })
         })
     }
